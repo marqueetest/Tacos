@@ -41,7 +41,7 @@ export const buy = async (req: Request, res: Response) => {
     var data = await UserModel.findOneAndUpdate({ _id: userId }, { $inc: { tacos : payload.tacos, wallet : -amount } }, { new : true } );
     
 
-    return res.status(200).json({ data : { msg : 'Tacos buy successfully.', user : data } });
+    return res.status(200).json({ msg : 'Tacos buy successfully.', data : data });
   } catch (error) {
     const err = error as Error;
     return res.status(400).json({ error: err.message });
@@ -83,7 +83,7 @@ export const sell = async (req: Request, res: Response) => {
 
     var data = await UserModel.findOneAndUpdate({ _id: userId }, { $inc: { tacos : -payload.tacos, wallet : amount } }, { new : true } );
 
-    return res.status(200).json({ data : { msg : 'Tacos sold successfully.', user : data } });
+    return res.status(200).json( { msg : 'Tacos sold successfully.', data : data } );
   } catch (error) {
     const err = error as Error;
     return res.status(400).json({ error: err.message });
@@ -129,7 +129,7 @@ export const transfer = async (req: Request, res: Response) => {
 
     await receiver.save();
 
-    return res.status(200).json({ data : { msg : `Tacos transferred to ${receiver.username} successfully.`, user : sender } });
+    return res.status(200).json( { msg : `Tacos transferred to ${receiver.username} successfully.`, data : sender } );
   } catch (error) {
     const err = error as Error;
     return res.status(400).json({ error: err.message });

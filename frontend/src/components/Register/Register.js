@@ -7,11 +7,11 @@ const Register = () => {
   const navigate = useNavigate();
 
   const [formErrors, setFormErrors] = useState({});
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [isSubmit, setIsSubmit] = useState(false);
   const [user, setUserDetails] = useState({
-    fname: "",
-    lname: "",
-    email: "",
+    username: "",
     password: "",
     cpassword: "",
   });
@@ -26,18 +26,11 @@ const Register = () => {
 
   const validateForm = (values) => {
     const error = {};
-    const regex = /^[^\s+@]+@[^\s@]+\.[^\s@]{2,}$/i;
-    if (!values.fname) {
-      error.fname = "First Name is required";
+
+    if (!values.username) {
+      error.username = "Username is required";
     }
-    if (!values.lname) {
-      error.lname = "Last Name is required";
-    }
-    if (!values.email) {
-      error.email = "Email is required";
-    } else if (!regex.test(values.email)) {
-      error.email = "This is not a valid email format!";
-    }
+
     if (!values.password) {
       error.password = "Password is required";
     } else if (values.password.length < 4) {
@@ -60,10 +53,12 @@ const Register = () => {
 
   useEffect(() => {
     if (Object.keys(formErrors).length === 0 && isSubmit) {
-      console.log(user);
-      axios.post("http://localhost:8000/signup/", user).then((res) => {
-        alert(res.data.message);
+
+      axios.post(`${process.env.REACT_APP_BASE_PATH}auth/signup`, user).then((res) => {
+        setSuccess(res.data.msg);
         navigate("/login", { replace: true });
+      }).catch((err)=> {
+        setError(err.response.data.error);
       });
     }
   }, [formErrors]);
@@ -74,31 +69,13 @@ const Register = () => {
           <h1>Create your account</h1>
           <input
             type="text"
-            name="fname"
-            id="fname"
-            placeholder="First Name"
+            name="username"
+            id="username"
+            placeholder="User Name"
             onChange={changeHandler}
-            value={user.fname}
+            value={user.username}
           />
-          <p className={basestyle.error}>{formErrors.fname}</p>
-          <input
-            type="text"
-            name="lname"
-            id="lname"
-            placeholder="Last Name"
-            onChange={changeHandler}
-            value={user.lname}
-          />
-          <p className={basestyle.error}>{formErrors.lname}</p>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            placeholder="Email"
-            onChange={changeHandler}
-            value={user.email}
-          />
-          <p className={basestyle.error}>{formErrors.email}</p>
+          <p className={basestyle.error}>{formErrors.username}</p>
           <input
             type="password"
             name="password"
@@ -117,6 +94,8 @@ const Register = () => {
             value={user.cpassword}
           />
           <p className={basestyle.error}>{formErrors.cpassword}</p>
+          { success ? <p className="alert-success">{success}</p> : "" }
+          { error ? <p className={basestyle.error}>{error}</p> : "" }
           <button className={basestyle.button_common} onClick={signupHandler}>
             Register
           </button>

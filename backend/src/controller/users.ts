@@ -97,6 +97,9 @@ export const createUser = async (req: Request, res: Response) => {
 
     const _query: { isDeleted: boolean; username?: string } = { isDeleted: false };
 
+    if(username) _query.username = username.toLowerCase();
+
+
     let user = await UserModel.findOne(_query);
 
     if (user) return res.status(400).json({ error: 'User already exist with same username.' });

@@ -17,6 +17,15 @@
     padding: 0px 1rem;
 }
 
+
+.alert-success{
+    color: green;
+    text-align: left;
+    margin: auto;
+    font-size: 16px;
+    padding: 0px 1rem;
+  }
+
 /* login & register */
 .mainWrapper {
     width: 400px;
@@ -109,3 +118,40 @@
 }
 
 /* profile */
+.mainWrapper h4{
+    padding: 16px;
+    font-size: 24px;
+}
+.username{
+    display: flex;
+    font-size: 18px;
+    margin-bottom: 12px
+}
+.wrapper{
+    background-color: #d3d3d3;
+    border-radius: 6px;
+    padding: 5px 10px;
+    display: flex;
+    color: #fff;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid black;
+    background-color: olivedrab;
+    margin-bottom: 5px;
+}
+.walletLeft{
+    flex-direction: column;
+    display: flex;
+    text-align: initial;
+}
+.walletLeft span:first-child{
+    font-size: 14px;
+}
+.walletRight button{
+    background: transparent;
+    border: 0;
+    color: #fff;
+}
+.walletRight button:hover{
+    color: #000;
+}
