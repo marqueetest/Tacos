@@ -1,0 +1,27 @@
+FROM node:16.13.1 AS backend
+
+WORKDIR /app
+
+# Copy package.json and package-lock.json to the working directory
+COPY backend/package*.json ./
+
+COPY backend/tsconfig*.json ./
+
+COPY backend/src ./src
+
+# Install dependencies
+RUN npm install
+
+# Build the TypeScript code
+RUN rm -r /app/dist
+
+RUN mkdir /app/dist
+
+RUN npx tsc
+
+# Copy the rest of the application code
+# COPY backend/ ./
+
+EXPOSE 5558
+
+CMD ["node", "dist/app.js"]

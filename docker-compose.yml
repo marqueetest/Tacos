@@ -1,0 +1,61 @@
+version: '3'
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    restart: always
+    container_name: nginx
+    hostname: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - node-webapp-network
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    networks:
+      - node-webapp-network
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    restart: always
+    ports:
+      - "5558:5558"
+    volumes:
+      - ./backend:/app
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_HOST=mongodb
+      - MONGO_PORT=27017
+    networks:
+      - node-webapp-network
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    volumes:
+      - ~/mongo:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - node-webapp-network
+networks:
+  node-webapp-network:
+    driver: bridge

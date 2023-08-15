@@ -17,7 +17,14 @@ const PORT = process.env.PORT || 5558;
 (async function () {
 
   try {
-    const url : string = process.env.MONGODB_URI || '';
+    const mongoHost = process.env.MONGO_HOST || 'localhost';
+    const mongoPort = process.env.MONGO_PORT || '27017';
+
+    console.log("Mongo Host :---- "+ mongoHost);
+    console.log("Mongo Port :---- "+ mongoPort);
+
+    const url : string = `mongodb://${mongoHost}:${mongoPort}/tacoDB`;
+
     const connection = await mongoose.connect(url);
     mongoose.Promise = global.Promise;
     if(connection) console.log('Database Connected Successfully...');
